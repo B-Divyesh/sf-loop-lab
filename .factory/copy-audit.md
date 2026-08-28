@@ -10,7 +10,7 @@ All landing sentences are below 23 words and avoid the banned terms.
 | Your file stays on this device. | 6 | — |
 | Offline after the first visit. | 5 | — |
 | Local audio never uploads. | 4 | — |
-| Free core looping and cards. | 5 | — |
+| Free with no account. | 4 | — |
 | Set two points. Hear the middle. | 7 | — |
 | Use a file you have permission to use. | 8 | — |
 | Make a short part that repeats. | 7 | — |
@@ -20,9 +20,9 @@ All landing sentences are below 23 words and avoid the banned terms.
 | Time-stretch sound quality varies by browser and source audio. | 9 | — |
 | Your audio is decoded and played in this browser. | 10 | — |
 | It is never sent to a server. | 8 | — |
-| Save more than six loop cards. | 7 | — |
-| Loop Lab Plus is $9 once. | 6 | — |
-| It adds unlimited local cards. | 5 | — |
+| Reopen a loop where you left it. | 7 | — |
+| Saved practice cards appear here. | 5 | — |
+| Save one from the practice desk. | 6 | — |
 
 ## Terminology
 
@@ -32,4 +32,4 @@ All landing sentences are below 23 words and avoid the banned terms.
 | Imported sound | audio clip |
 | Repeat boundaries | A and B / loop points |
 | Trial workspace | demo |
-| Additional license | Loop Lab Plus |
+| Portable backup | card export |
