@@ -7,6 +7,22 @@ export type LoopCard = {
   bpm: number
   speed: number
   createdAt: number
+  clip?: StoredClip
 }
 
-export type ClipState = { name: string; duration: number; source: 'sample' | 'file' }
+export type StoredClip = {
+  name: string
+  duration: number
+  source: 'sample' | 'file'
+  audio?: Blob
+}
+
+export type ClipState = StoredClip
+
+export type WorkspaceState = {
+  clip: StoredClip
+  start: number
+  end: number
+  bpm: number
+  speed: number
+}

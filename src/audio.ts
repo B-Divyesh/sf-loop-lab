@@ -13,8 +13,11 @@ export class LoopPlayer {
   private sources: AudioBufferSourceNode[] = []
 
   async loadFile(file: File) {
+    return this.loadBlob(file)
+  }
+  async loadBlob(blob: Blob) {
     const ctx = this.ensureContext()
-    this.buffer = await ctx.decodeAudioData(await file.arrayBuffer())
+    this.buffer = await ctx.decodeAudioData(await blob.arrayBuffer())
     this.start = 0; this.end = Math.min(this.buffer.duration, 8); this.position = this.start
     return this.buffer.duration
   }
@@ -48,7 +51,7 @@ export class LoopPlayer {
     this.timer = window.setInterval(() => this.schedule(), 45)
     return true
   }
-  pause() { this.playing = false; clearInterval(this.timer); this.sources.forEach(s => { try { s.stop() } catch {} }); this.sources = [] }
+  pause() { this.playing = false; clearInterval(this.timer); this.sources.forEach(s => { try { s.stop() } catch { /* source already stopped */ } }); this.sources = [] }
   stop() { this.pause(); this.position = this.start }
   private schedule() {
     if (!this.ctx || !this.buffer || !this.playing) return

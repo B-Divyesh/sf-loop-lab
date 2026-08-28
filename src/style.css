@@ -81,6 +81,10 @@ footer {
     monospace;
   letter-spacing: 0.08em;
   text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  min-width: 44px;
+  min-height: 44px;
 }
 .wordmark span {
   color: var(--amber);
@@ -93,6 +97,11 @@ footer {
 }
 .site-head nav a {
   color: var(--muted);
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  min-width: 44px;
+  justify-content: center;
 }
 .hero {
   display: grid;
@@ -168,10 +177,16 @@ footer {
   inset: 0;
   opacity: 0;
   cursor: pointer;
+  width: 100%;
+  min-height: 44px;
+}
+.file-button:focus-within {
+  outline: 3px solid var(--mint);
+  outline-offset: 3px;
 }
 .file-button.small {
   font-size: 14px;
-  min-height: 40px;
+  min-height: 44px;
 }
 .action-note {
   margin: 12px 0 16px;
@@ -297,6 +312,15 @@ footer {
 .wave i:nth-child(3n) {
   background: var(--amber);
 }
+.wave .bar-0 { height: 24%; }
+.wave .bar-1 { height: 32%; }
+.wave .bar-2 { height: 41%; }
+.wave .bar-3 { height: 50%; }
+.wave .bar-4 { height: 59%; }
+.wave .bar-5 { height: 68%; }
+.wave .bar-6 { height: 77%; }
+.wave .bar-7 { height: 84%; }
+.wave .bar-8 { height: 91%; }
 .range-label {
   position: absolute;
   top: 8px;
@@ -338,6 +362,7 @@ output {
 .ranges input {
   display: block;
   width: 100%;
+  min-height: 44px;
   accent-color: var(--amber);
   margin-top: 7px;
 }
@@ -372,6 +397,7 @@ output {
   color: var(--paper);
   border: 1px solid var(--blue);
   padding: 3px;
+  min-height: 44px;
 }
 .speed small {
   display: block;
@@ -394,7 +420,8 @@ output {
   background: none;
   color: var(--mint);
   text-decoration: underline;
-  padding: 4px;
+  padding: 8px;
+  min-height: 44px;
 }
 .bpm input {
   width: 64px;
@@ -408,15 +435,13 @@ output {
   gap: 12px;
   align-items: end;
 }
-.card-form label,
-.license-form label {
+.card-form label {
   display: block;
   font-size: 13px;
   color: var(--muted);
   margin-bottom: 4px;
 }
-.card-form input,
-.license-form input {
+.card-form input {
   width: 100%;
   border: 1px solid var(--line);
   background: var(--ink);
@@ -488,15 +513,6 @@ output {
   text-decoration: underline;
   padding: 12px 0;
 }
-.license-form {
-  display: flex;
-  gap: 8px;
-  align-items: end;
-  flex-wrap: wrap;
-}
-.license-form input {
-  width: 260px;
-}
 .demo-banner {
   border-bottom: 2px solid var(--amber);
   display: flex;
@@ -517,6 +533,10 @@ output {
 }
 .demo-banner a {
   color: var(--mint);
+  display: inline-flex;
+  align-items: center;
+  min-width: 44px;
+  min-height: 44px;
 }
 .demo-heading {
   padding: 50px 0 5px;
@@ -535,6 +555,18 @@ output {
 }
 .saved-section {
   padding: 18px 0 100px;
+}
+.saved-heading-row {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 24px;
+}
+.data-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-bottom: 30px;
 }
 .cards {
   list-style: none;
@@ -609,12 +641,30 @@ footer {
 footer p {
   margin: 0;
 }
-.announcer {
+.status-message {
   position: fixed;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
+  z-index: 30;
+  right: max(16px, env(safe-area-inset-right));
+  bottom: max(16px, env(safe-area-inset-bottom));
+  width: min(420px, calc(100% - 32px));
+  border: 2px solid var(--mint);
+  background: var(--panel);
+  color: var(--paper);
+  box-shadow: 6px 6px 0 #000a18;
+  padding: 12px 16px;
+}
+.status-message.error {
+  border-color: var(--coral);
+}
+.status-message[hidden] {
+  display: none;
+}
+footer a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  min-width: 44px;
+  justify-content: center;
 }
 :focus-visible {
   outline: 3px solid var(--mint);
@@ -695,6 +745,12 @@ footer p {
   }
   .cards {
     grid-template-columns: 1fr;
+  }
+  .saved-heading-row {
+    display: block;
+  }
+  .data-actions {
+    padding-bottom: 24px;
   }
   .demo-banner {
     align-items: flex-start;

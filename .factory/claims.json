@@ -3,28 +3,56 @@
     "id": "offline-reload",
     "claim": "Works offline after the first visit.",
     "where": "landing facts, README",
-    "test": "npm test -- --grep @claim:offline-reload",
-    "sandbox": "fresh browser context; open demo once, set offline, reload demo"
+    "test": "npm run test:e2e -- --grep @claim:offline-reload",
+    "sandbox": "fresh Chromium context; open demo, wait for service-worker control, set offline, reload demo"
   },
   {
     "id": "demo-isolated",
     "claim": "Demo sample data is separate from real loops.",
-    "where": "demo banner",
-    "test": "npm test -- --grep @claim:demo-isolated",
-    "sandbox": "fresh jsdom database; save a demo card and assert its key begins demo:"
+    "where": "demo banner, README",
+    "test": "npm run test:e2e -- --grep @claim:demo-isolated",
+    "sandbox": "fresh Chromium context; save a demo card, start for real, assert the demo card is absent"
+  },
+  {
+    "id": "no-account",
+    "claim": "The free practice tool needs no account.",
+    "where": "landing facts, README",
+    "test": "npm run test:e2e -- --grep @claim:no-account",
+    "sandbox": "fresh Chromium context; open the sample from the first screen and use the ready practice desk"
   },
   {
     "id": "cards-local",
-    "claim": "Saved practice cards stay in this browser.",
-    "where": "landing facts, privacy page",
-    "test": "npm test -- --grep @claim:cards-local",
-    "sandbox": "fresh jsdom database; save and list a real card without network requests"
+    "claim": "Audio and practice cards stay in this browser and reopen after refresh.",
+    "where": "landing saved section, privacy page, README",
+    "test": "npm run test:e2e -- --grep @claim:cards-local",
+    "sandbox": "fresh Chromium context; import generated WAV, save at clamped BPM, reload, reopen card and assert playback is enabled"
+  },
+  {
+    "id": "audio-private",
+    "claim": "Imported audio is not uploaded.",
+    "where": "landing facts and boundaries, privacy page, README",
+    "test": "npm run test:e2e -- --grep @claim:audio-private",
+    "sandbox": "capture every request while importing and saving generated WAV; assert every request is same-origin"
+  },
+  {
+    "id": "no-tracking",
+    "claim": "Loop Lab uses no analytics or advertising.",
+    "where": "privacy page, README",
+    "test": "npm run test:e2e -- --grep @claim:no-tracking",
+    "sandbox": "capture every request through landing, audio import, and card save; assert every request is same-origin"
+  },
+  {
+    "id": "cards-export",
+    "claim": "Exports and imports practice cards with their audio.",
+    "where": "saved cards toolbar, README",
+    "test": "npm run test:e2e -- --grep @claim:cards-export",
+    "sandbox": "fresh Chromium context; save generated WAV card, export JSON, delete database, import JSON, reopen card"
   },
   {
     "id": "pitch-speed",
     "claim": "Slow playback keeps pitch in place.",
-    "where": "practice desk",
-    "test": "npm test -- --grep @claim:pitch-speed",
-    "sandbox": "unit test inspects the granular player's fixed playback rate design"
+    "where": "practice desk, README",
+    "test": "npm run test:unit -- -t @claim:pitch-speed",
+    "sandbox": "unit test advances source positions at half speed while each scheduled grain retains its natural playback rate"
   }
 ]
