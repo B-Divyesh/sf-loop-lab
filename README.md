@@ -24,7 +24,7 @@ The static site is written to `dist/`, with `index.html` at its root. Deploy tha
 
 ## Data and purchase
 
-Practice cards live in IndexedDB in this browser. The free app includes local cards and core looping. Loop Lab Plus is an optional $9 one-time license for unlimited local cards and WAV loop export. See `/privacy` and `/terms`.
+Practice cards live in IndexedDB in this browser. The free app includes local cards and core looping. Loop Lab Plus is an optional $9 one-time license for unlimited local cards. See `/privacy` and `/terms`.
 
 ## License
 

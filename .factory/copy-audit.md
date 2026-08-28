@@ -22,7 +22,7 @@ All landing sentences are below 23 words and avoid the banned terms.
 | It is never sent to a server. | 8 | — |
 | Save more than six loop cards. | 7 | — |
 | Loop Lab Plus is $9 once. | 6 | — |
-| It adds unlimited local cards and WAV loop export. | 9 | — |
+| It adds unlimited local cards. | 5 | — |
 
 ## Terminology
 
