@@ -91,3 +91,16 @@ PLAYWRIGHT_BASE_URL=https://loop-lab.sociobot.in npm run test:e2e
 
 - Browser storage quotas still vary by device. Export card backups before clearing browser site data.
 - Loop Lab remains free until its separate billing product is registered; no paid surface is shown.
+
+---
+
+## Review 2 handoff
+
+- Work order: `loop-lab-review-2`
+- Reviewed: 2026-08-28 UTC
+- Result: **FAIL** — see `.factory/review-2.md`.
+- This reviewer changed no product code. The only changes are this handoff entry and the committed review report.
+
+Verification performed from a clean `npm ci` install: every exact command in `.factory/claims.json` passed, and `PLAYWRIGHT_BASE_URL=https://loop-lab.sociobot.in npm run test:e2e` passed all eight live browser tests. Fresh 390 px and desktop live checks confirmed the one-click isolated demo, Reset demo, local-only demo keys, service-worker offline claim coverage, metadata, routes, and prior repair fixes.
+
+Remaining blocking work: repair `/#saved` navigation and Back-button scroll restoration. The desktop header’s **Saved loops** link currently leaves the visitor at the top of the page while the URL changes to `/#saved`. Minor plain-language/terminology fixes are itemized in the review.
