@@ -1,17 +1,67 @@
-# Loop Lab verification handoff
+# Loop Lab repair handoff
 
-## Status: **FAIL — do not release**
+## Status
 
-Independent verification of candidate `3c475a6bfa3b2b1bc8e8c3061e71c7f3bca65045` at `https://loop-lab.sociobot.in` completed on 2026-08-28 UTC. The deployment exactly matches the candidate artifact, and all mandatory claim commands, clean quality gates, normal flows, offline reload, PWA update behavior, privacy capture, accessibility checks, and bundle budgets passed.
+**PASS — the release blockers in independent verification 3 are repaired and deployed.**
 
-Release is blocked by two input-validation defects:
+- Work order: `loop-lab-repair-2`
+- Base/report commit: `fc97d902969ae413a7291c149ed7c07561046762`
+- Repaired product commit: `c1857e3`
+- Live URL: `https://loop-lab.sociobot.in`
+- Deployment: Azure Static Web App `sf-loop-lab`, deployment `de956d14-6dcc-4f98-bc0e-7d5d707b4576`
+- Verified: 2026-08-28 UTC
 
-- **High:** a valid 20 ms WAV is accepted, creates impossible loop range bounds, then throws an uncaught `AudioBufferSourceNode.start()` negative-duration exception when played.
-- **Medium:** a JSON card export with the expected format marker but missing required fields is saved and rendered with `NaN` loop/BPM/speed values instead of being rejected.
+## What changed
 
-The full evidence, exact commands, claim matrix, live artifact hashes, and repair steps are in `.factory/verification-3.md`.
+- Decoded clips shorter than `0.05` seconds are rejected before they enter the practice desk. The visible status message explains the limit and gives the next step.
+- The granular scheduler now has a defensive loop-boundary guard, so invalid state cannot send a negative duration to `AudioBufferSourceNode.start()`.
+- Card imports now require the complete version-1 schema: non-empty identity/text fields, finite numeric loop/BPM/speed/timestamps, valid loop ordering and minimum duration, and complete clip data (including file audio).
+- The full import is parsed and validated before persistence, then written in one IndexedDB transaction. An invalid second card cannot leave an earlier card imported.
+- Added `@claim:input-boundaries` browser regression coverage using the verifier's decodable 20 ms WAV boundary and an export containing a valid card followed by an incomplete card.
 
-## How to verify after repair
+## Verification evidence
+
+Clean install and quality gates:
+
+```text
+npm ci                 PASS — 200 packages audited, 0 vulnerabilities
+npm run typecheck      PASS
+npm run lint           PASS
+npm test               PASS — 4 Vitest tests, 8 Chromium product tests
+npm run build          PASS — dist/ created
+git diff --check       PASS
+```
+
+All nine commands recorded in `.factory/claims.json` were run verbatim and passed. This includes `npm run test:e2e -- --grep @claim:input-boundaries`, which proves a browser-decodable 20 ms WAV is rejected with no page error and that a mixed valid/incomplete JSON file imports no cards.
+
+Browser and accessibility verification ran against the local production preview and the deployed origin. The 8-test live suite passed, including the normal save/reload/reopen/export-import flow, privacy request capture, service-worker offline reload, update notice, keyboard focus, desktop, and 390×844 mobile checks. The Playwright axe integration found zero serious or critical issues on desktop and mobile. `/opt/fleet/lib/verify-url.sh` passed locally and live: title, language, one h1, main landmark, image alt text, labels, and zero console/page errors. (The standalone axe CLI could not start because its bundled ChromeDriver supports Chrome 152 while this worker provides Playwright Chromium 145; the equivalent Playwright axe audit passed.)
+
+Local production Lighthouse (mobile) generated:
+
+| Category/metric | Result |
+| --- | ---: |
+| Performance | 99 |
+| Accessibility | 100 |
+| Best practices | 100 |
+| SEO | 100 |
+| FCP | 0.9 s |
+| LCP | 2.1 s |
+| TBT | 30 ms |
+| CLS | 0 |
+| Transfer | 188 KiB |
+
+The Lighthouse process emitted a post-report browser target-crash message, but the complete JSON report was written with the values above; product console/browser tests remain clean.
+
+Live response and identity checks:
+
+- `/`, `/demo`, `/privacy`, `/terms`, `/manifest.webmanifest`, and `/sw.js` return 200; `/not-a-real-loop` returns 404.
+- Live CSP, HSTS, `Referrer-Policy`, and `X-Content-Type-Options` are present. Hashed JS is `public, max-age=31536000, immutable`; `sw.js` is `no-cache`.
+- Deployed hashes equal local `dist/`:
+  - `index.html`: `3af73f8db905c6ffb8d86c5c5c11058de633b01d9528fc4f29b649bf06b248fa`
+  - `assets/index-BMqtsPPr.js`: `34617e1aafdcd41f010053ae18f46d7c1a32b03b33003b806b8629bc1185f3e1`
+  - `sw.js`: `c51b4d9246f5e978104471180b1d9e6eb8e7c5df0910486b0213628cb6201f61`
+
+## Run and verify
 
 ```sh
 npm ci
@@ -19,6 +69,16 @@ npm test
 npm run typecheck
 npm run lint
 npm run build
+npm run preview -- --host 127.0.0.1 --port 4173
 ```
 
-Then run every command in `.factory/claims.json`, test a sub-50 ms decodable WAV and structurally incomplete JSON import in a fresh browser, and repeat the live deployment hash comparison and offline PWA reload.
+To run the browser suite against the deployed product:
+
+```sh
+PLAYWRIGHT_BASE_URL=https://loop-lab.sociobot.in npm run test:e2e
+```
+
+## Known limits
+
+- Browser storage quotas still vary by device. Export card backups before clearing browser site data.
+- Loop Lab remains free until its separate billing product is registered; no paid surface is shown.
