@@ -1,0 +1,30 @@
+[
+  {
+    "id": "offline-reload",
+    "claim": "Works offline after the first visit.",
+    "where": "landing facts, README",
+    "test": "npm test -- --grep @claim:offline-reload",
+    "sandbox": "fresh browser context; open demo once, set offline, reload demo"
+  },
+  {
+    "id": "demo-isolated",
+    "claim": "Demo sample data is separate from real loops.",
+    "where": "demo banner",
+    "test": "npm test -- --grep @claim:demo-isolated",
+    "sandbox": "fresh jsdom database; save a demo card and assert its key begins demo:"
+  },
+  {
+    "id": "cards-local",
+    "claim": "Saved practice cards stay in this browser.",
+    "where": "landing facts, privacy page",
+    "test": "npm test -- --grep @claim:cards-local",
+    "sandbox": "fresh jsdom database; save and list a real card without network requests"
+  },
+  {
+    "id": "pitch-speed",
+    "claim": "Slow playback keeps pitch in place.",
+    "where": "practice desk",
+    "test": "npm test -- --grep @claim:pitch-speed",
+    "sandbox": "unit test inspects the granular player's fixed playback rate design"
+  }
+]

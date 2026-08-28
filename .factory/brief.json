@@ -1,0 +1,9 @@
+{
+  "slug": "loop-lab",
+  "title": "Loop Lab",
+  "summary": "Turn a short audio clip into a repeatable practice loop.",
+  "artifact_class": "pwa-offline",
+  "user": "Beginning electronic-music makers who want to practise a short reference passage without learning a DAW.",
+  "smallest_useful_product": "Import a local audio clip, set A/B loop points, tap or set BPM, slow playback without changing pitch, and save local practice cards.",
+  "monetization": "freemium"
+}
