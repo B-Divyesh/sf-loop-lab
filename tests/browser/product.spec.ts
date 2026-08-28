@@ -120,6 +120,32 @@ test('visible errors, update status, deletion confirmation, and initial focus or
   await expect(page.locator('.card-open', { hasText: 'One second tone' })).toBeVisible()
 })
 
+test('@claim:input-boundaries rejects short clips and incomplete card exports before playback or saving', async ({ page }) => {
+  const pageErrors: string[] = []
+  page.on('pageerror', error => pageErrors.push(error.message))
+  await page.goto('/')
+  await page.locator('#hero-file').setInputFiles({ name: 'twenty-ms.wav', mimeType: 'audio/wav', buffer: wavBuffer(.02) })
+  await expect(page.locator('.status-message')).toHaveText('This clip is too short to loop. Choose audio at least 0.05 seconds long.')
+  await expect(page.locator('.clip-strip b')).toHaveText('No clip loaded')
+  await expect(page.getByRole('button', { name: 'Play loop' })).toBeDisabled()
+  expect(pageErrors).toEqual([])
+
+  const validCard = {
+    id: 'would-have-imported', name: 'Valid before broken', note: 'This must not be saved.',
+    start: 0, end: 1, bpm: 120, speed: 1, createdAt: 1,
+    clip: { name: 'one-second-tone', duration: 1, source: 'file', audioBase64: wavBuffer().toString('base64'), audioType: 'audio/wav' },
+  }
+  const malformedExport = JSON.stringify({
+    format: 'loop-lab-cards', version: 1,
+    cards: [validCard, { id: 'broken', name: 'Incomplete', note: 'Missing loop fields' }],
+  })
+  await page.locator('#import-cards').setInputFiles({ name: 'broken-loop-lab-cards.json', mimeType: 'application/json', buffer: Buffer.from(malformedExport) })
+  await expect(page.locator('.status-message')).toHaveText('That file is not a Loop Lab card export. Choose a Loop Lab JSON file.')
+  await expect(page.locator('.card-open', { hasText: 'Valid before broken' })).toHaveCount(0)
+  await expect(page.locator('.card-open', { hasText: 'Incomplete' })).toHaveCount(0)
+  await expect(page.locator('#cards')).toContainText('Saved practice cards appear here.')
+})
+
 test('desktop and 390px mobile pass accessibility, metadata, and touch checks', async ({ page }) => {
   const browserErrors: string[] = []
   page.on('console', message => { if (message.type() === 'error') browserErrors.push(message.text()) })

@@ -28,6 +28,8 @@ The static site is written to `dist/`, with `index.html` at its root. Deploy tha
 
 Audio, the active loop, and practice cards live in IndexedDB. Use **Export cards** to make a portable JSON backup and **Import cards** to restore it. The product is free while its former paid checkout is unavailable. See `/privacy` and `/terms`.
 
+Audio clips must be at least 0.05 seconds long. Loop Lab rejects shorter clips and incomplete card exports before they are saved or played.
+
 ## License
 
 MIT. See [LICENSE](LICENSE).

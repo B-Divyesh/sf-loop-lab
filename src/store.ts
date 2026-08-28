@@ -27,11 +27,19 @@ export async function listCards(): Promise<LoopCard[]> {
 }
 
 export async function saveCard(card: LoopCard) {
+  await saveCards([card])
+}
+
+/** Save a validated import in one transaction so a failed write cannot leave a partial library. */
+export async function saveCards(cards: LoopCard[]) {
   const db = await open()
   return new Promise<void>((resolve, reject) => {
-    const req = db.transaction(STORE, 'readwrite').objectStore(STORE).put({ key: namespace() + card.id, value: card })
-    req.onsuccess = () => { db.close(); resolve() }
-    req.onerror = () => reject(req.error)
+    const transaction = db.transaction(STORE, 'readwrite')
+    const store = transaction.objectStore(STORE)
+    cards.forEach(card => store.put({ key: namespace() + card.id, value: card }))
+    transaction.oncomplete = () => { db.close(); resolve() }
+    transaction.onerror = () => { db.close(); reject(transaction.error) }
+    transaction.onabort = () => { db.close(); reject(transaction.error) }
   })
 }
 

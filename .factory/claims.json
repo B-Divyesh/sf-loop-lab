@@ -54,5 +54,12 @@
     "where": "practice desk, README",
     "test": "npm run test:unit -- -t @claim:pitch-speed",
     "sandbox": "unit test advances source positions at half speed while each scheduled grain retains its natural playback rate"
+  },
+  {
+    "id": "input-boundaries",
+    "claim": "Rejects clips shorter than 0.05 seconds and incomplete card files before saving or playback.",
+    "where": "audio import recovery message, card import recovery message, README",
+    "test": "npm run test:e2e -- --grep @claim:input-boundaries",
+    "sandbox": "fresh Chromium context; import a valid 20 ms WAV and a JSON export whose second card is incomplete; assert recovery, no playback error, and no imported cards"
   }
 ]

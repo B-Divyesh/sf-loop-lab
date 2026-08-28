@@ -1,3 +1,13 @@
+/** The controls and granular scheduler use 50 ms as their smallest useful loop. */
+export const MIN_LOOP_DURATION = .05
+
+export class LoopDurationError extends Error {
+  constructor() {
+    super(`Audio clips must be at least ${MIN_LOOP_DURATION} seconds long`)
+    this.name = 'LoopDurationError'
+  }
+}
+
 /** A small granular player. Grains play at their natural rate while their start
  * positions move at the requested speed, so slowing does not lower pitch. */
 export class LoopPlayer {
@@ -17,7 +27,9 @@ export class LoopPlayer {
   }
   async loadBlob(blob: Blob) {
     const ctx = this.ensureContext()
-    this.buffer = await ctx.decodeAudioData(await blob.arrayBuffer())
+    const decoded = await ctx.decodeAudioData(await blob.arrayBuffer())
+    if (!Number.isFinite(decoded.duration) || decoded.duration < MIN_LOOP_DURATION) throw new LoopDurationError()
+    this.buffer = decoded
     this.start = 0; this.end = Math.min(this.buffer.duration, 8); this.position = this.start
     return this.buffer.duration
   }
@@ -56,11 +68,22 @@ export class LoopPlayer {
   private schedule() {
     if (!this.ctx || !this.buffer || !this.playing) return
     const grain = .075, hop = .042
+    if (!Number.isFinite(this.start) || !Number.isFinite(this.end) || this.start < 0 || this.end > this.buffer.duration || this.end - this.start < MIN_LOOP_DURATION) {
+      this.stop()
+      return
+    }
     while (this.nextTime < this.ctx.currentTime + .15) {
+      if (this.position < this.start || this.position >= this.end || this.position >= this.buffer.duration) this.position = this.start
+      const available = this.buffer.duration - this.position
+      const duration = Math.min(grain, available, this.end - this.position)
+      if (!Number.isFinite(duration) || duration <= 0) {
+        this.position = this.start
+        continue
+      }
       const src = this.ctx.createBufferSource(); src.buffer = this.buffer
       const gain = this.ctx.createGain(); gain.gain.setValueAtTime(0, this.nextTime); gain.gain.linearRampToValueAtTime(.62, this.nextTime + .01); gain.gain.setValueAtTime(.62, this.nextTime + grain - .012); gain.gain.linearRampToValueAtTime(0, this.nextTime + grain)
       src.connect(gain).connect(this.ctx.destination)
-      src.start(this.nextTime, this.position, Math.min(grain, this.buffer.duration - this.position))
+      src.start(this.nextTime, this.position, duration)
       this.sources.push(src); src.onended = () => { this.sources = this.sources.filter(x => x !== src) }
       this.position += hop * this.speed
       if (this.position >= this.end) this.position = this.start + (this.position - this.end)

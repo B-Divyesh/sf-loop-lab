@@ -1,5 +1,5 @@
 import "./style.css";
-import { LoopPlayer } from "./audio";
+import { LoopDurationError, LoopPlayer, MIN_LOOP_DURATION } from "./audio";
 import {
   clearCards,
   clearWorkspace,
@@ -8,6 +8,7 @@ import {
   makeId,
   removeCard,
   saveCard,
+  saveCards,
   saveWorkspace,
 } from "./store";
 import type { ClipState, LoopCard, StoredClip } from "./types";
@@ -109,7 +110,11 @@ async function loadRealFile(file: File) {
     renderDesk();
     $("#desk").scrollIntoView({ behavior: "smooth", block: "start" });
     announce(`${file.name} loaded. Set A and B, then press play.`);
-  } catch {
+  } catch (error) {
+    if (error instanceof LoopDurationError) {
+      announce(`This clip is too short to loop. Choose audio at least ${MIN_LOOP_DURATION.toFixed(2)} seconds long.`, true);
+      return;
+    }
     announce("The browser could not read that audio file. Try WAV, MP3, or M4A.", true);
   }
 }
@@ -236,7 +241,8 @@ async function applyCard(card: LoopCard) {
   }
 }
 
-type PortableCard = Omit<LoopCard, "clip"> & { clip?: Omit<StoredClip, "audio"> & { audioBase64?: string; audioType?: string } };
+type PortableClip = Omit<StoredClip, "audio"> & { audioBase64?: string; audioType?: string };
+type PortableCard = Omit<LoopCard, "clip"> & { clip?: PortableClip };
 
 async function exportCards() {
   const portable: PortableCard[] = await Promise.all(cards.map(async ({ clip: cardClip, ...card }) => ({
@@ -263,26 +269,64 @@ async function importCards(event: Event) {
   const file = input.files?.[0];
   if (!file) return;
   try {
-    const parsed = JSON.parse(await file.text()) as { format?: string; cards?: PortableCard[] };
-    if (parsed.format !== "loop-lab-cards" || !Array.isArray(parsed.cards)) throw new Error("format");
-    for (const portable of parsed.cards) {
-      if (!portable.id || !portable.name || !portable.note) throw new Error("card");
-      const storedClip = portable.clip ? {
-        name: portable.clip.name,
-        duration: portable.clip.duration,
-        source: portable.clip.source,
-        audio: portable.clip.audioBase64 ? new Blob([base64ToArrayBuffer(portable.clip.audioBase64)], { type: portable.clip.audioType || "audio/wav" }) : undefined,
-      } : undefined;
-      await saveCard({ ...portable, clip: storedClip });
-    }
+    const imported = parsePortableCards(JSON.parse(await file.text()));
+    await saveCards(imported);
     cards = await listCards();
     renderCards();
-    announce(`Imported ${parsed.cards.length} practice ${parsed.cards.length === 1 ? "card" : "cards"}.`);
+    announce(`Imported ${imported.length} practice ${imported.length === 1 ? "card" : "cards"}.`);
   } catch {
     announce("That file is not a Loop Lab card export. Choose a Loop Lab JSON file.", true);
   } finally {
     input.value = "";
   }
+}
+
+function parsePortableCards(value: unknown): LoopCard[] {
+  if (!isRecord(value) || value.format !== "loop-lab-cards" || value.version !== 1 || !Array.isArray(value.cards)) throw new Error("format");
+  const ids = new Set<string>();
+  return value.cards.map((item) => {
+    if (!isRecord(item)) throw new Error("card");
+    const id = requiredText(item.id);
+    if (ids.has(id)) throw new Error("duplicate card");
+    ids.add(id);
+    const name = requiredText(item.name);
+    const note = requiredText(item.note);
+    const start = finite(item.start);
+    const end = finite(item.end);
+    const bpm = finite(item.bpm);
+    const speed = finite(item.speed);
+    const createdAt = finite(item.createdAt);
+    const clip = parsePortableClip(item.clip);
+    if (start < 0 || end <= start || end > clip.duration || end - start < MIN_LOOP_DURATION || bpm < 30 || bpm > 300 || ![.5, .75, 1].includes(speed) || createdAt <= 0) throw new Error("card values");
+    return { id, name, note, start, end, bpm, speed, createdAt, clip };
+  });
+}
+
+function parsePortableClip(value: unknown): StoredClip {
+  if (!isRecord(value)) throw new Error("clip");
+  const name = requiredText(value.name);
+  const duration = finite(value.duration);
+  if (duration < MIN_LOOP_DURATION || (value.source !== "sample" && value.source !== "file")) throw new Error("clip values");
+  if (value.source === "sample") return { name, duration, source: "sample" };
+  if (typeof value.audioBase64 !== "string" || !value.audioBase64.trim()) throw new Error("missing audio");
+  if (value.audioType !== undefined && typeof value.audioType !== "string") throw new Error("audio type");
+  const audio = base64ToArrayBuffer(value.audioBase64);
+  if (!audio.byteLength) throw new Error("empty audio");
+  return { name, duration, source: "file", audio: new Blob([audio], { type: typeof value.audioType === "string" ? value.audioType : "application/octet-stream" }) };
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function requiredText(value: unknown) {
+  if (typeof value !== "string" || !value.trim()) throw new Error("text");
+  return value.trim();
+}
+
+function finite(value: unknown) {
+  if (typeof value !== "number" || !Number.isFinite(value)) throw new Error("number");
+  return value;
 }
 
 function arrayBufferToBase64(buffer: ArrayBuffer) {
