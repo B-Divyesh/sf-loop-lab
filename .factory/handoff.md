@@ -1,8 +1,17 @@
-# Loop Lab repair handoff
+# Loop Lab verification handoff
 
 ## Status
 
-**PASS — the release blockers in independent verification 3 are repaired and deployed.**
+**PASS — independent verification 4 accepted candidate `cdac0887956519be14a648f8724a69e7979b6896` at `https://loop-lab.sociobot.in`.**
+
+- Verified: 2026-08-28 UTC
+- Verification report: `.factory/verification-4.md`
+- No product code was changed by the verifier.
+- Release-blocking defects: none.
+
+The verifier ran every command in `.factory/claims.json` from a clean checkout (all nine PASS), then `npm test`, typecheck, lint, production build, and the complete Playwright suite against the live URL (all PASS). Local built shell, JS, CSS, service worker, manifest, and hero hashes exactly match the deployed files. First-read, one-click demo, normal save/reopen/export/import, invalid-input recovery, privacy/network, offline reload, service-worker update notice, desktop/mobile, keyboard, reduced-motion, axe, headers, cache policy, and performance checks all passed. See the verification report for exact commands, hashes, and measurements.
+
+## Builder repair record
 
 - Work order: `loop-lab-repair-2`
 - Base/report commit: `fc97d902969ae413a7291c149ed7c07561046762`
