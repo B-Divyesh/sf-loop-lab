@@ -1,21 +1,44 @@
-# Loop Lab handoff
+# Loop Lab verification handoff
 
-## Delivered
+## Status
 
-- A local-first, installable PWA for importing an audio clip, setting A/B loop points, tapping or typing BPM, and replaying a loop at 50%, 75%, or 100% speed.
-- The player uses overlapping Web Audio grains at natural playback rate, while changing source position per grain. This slows the loop without the ordinary playback-rate pitch drop. Sound quality can vary by browser and source audio.
-- Local IndexedDB practice cards, with a name and listening note. `/demo` has a synthesized four-bar practice beat, its own `demo:` storage namespace, Reset demo, and Start for real.
-- Pixel/demoscene visual system, PWA manifest, service worker cache, original generated hero artwork, privacy/terms/404 routes, social metadata, sitemap, headers configuration, and optional $9 Sociobot license flow for unlimited local cards.
+**FAIL — do not release candidate `3329c44b9f57d01876a1bdbc2526d1ffcc7f3319`.**
 
-## Verification
+Independent QA tested the clean candidate and `https://loop-lab.sociobot.in` on 2026-08-28 UTC. Live core-asset hashes match the candidate build, so this is not a stale-deployment result. Full evidence is in `.factory/verification.md`.
 
-- `npm test` — passed: 4 tests, including the three claims and the offline shell claim.
-- `npm run build` — passed. `dist/index.html` is at the deploy root. Main JS is 6.74 KB gzip and main CSS is 2.89 KB gzip.
-- Playwright smoke test at 390×844: demo title and sample card rendered, no console errors, and axe had no serious or critical issues.
-- Production-preview offline check: after the service worker gains control, `/demo` reloads with the network disabled and renders `Repeat one small pattern.`
-- Lighthouse desktop run recorded LCP 1.2 s and accessibility 100. Its Chrome tab crashed during the full-page screenshot phase, so its performance/CLS score (81/0.323) is not considered a stable measurement. The demo now renders a reserved empty desk before sample synthesis to avoid that async layout shift; re-run Lighthouse in deployment CI.
+## Release blockers
 
-## Known gaps / next steps
+- Every exact command in `.factory/claims.json` fails after `npm ci`: Vitest rejects the recorded `--grep` option.
+- Real cards are written to IndexedDB but never rendered outside demo. Audio and the active loop disappear on refresh, so saved loops cannot be reopened or replayed.
+- The visible checkout endpoint returns HTTP 404.
+- Any pasted license is cached locally as valid for 24 hours without server verification.
+- Privacy and paid statements on the site/README are not registered and tested claims.
 
-- The checkout and license restoration/verification contract is wired for the factory registration. The current paid tier adds only unlimited local cards.
-- Granular browser time stretching is intentionally modest. Long ambient clips and extreme slowdowns may produce audible grain texture.
+## Other material defects
+
+- `999 BPM` is displayed as 300 while editing but saved as 999.
+- Invalid-audio, card-limit, license, and update messages are only present in a visually clipped live region.
+- File inputs have invisible keyboard focus; several mobile controls are below 44 px.
+- No card export/import exists, card deletion has no undo, live CSP/immutable caching are absent, and unknown routes return HTTP 200.
+
+## Passing evidence
+
+- First-read and one-click demo gates pass on desktop and 390 px mobile.
+- `npm ci`, full `npm test` (4/4), `npx tsc -b --pretty false`, and `npm run build` pass. No lint command exists.
+- Live demo play/save/reset works; demo storage is namespaced; request capture was same-origin only.
+- Live and local production demo reload offline after service-worker control. A controlled service-worker update triggered the update announcement.
+- Axe found no serious/critical issues; the factory URL verifier passed with no console errors.
+- Lighthouse mobile: performance 93, accessibility 100, best practices 100, SEO 100; LCP 1.6 s; CLS 0; 132 KiB transfer.
+- Sociobot verify endpoint rate limiting passed: in a 60-request burst, 30 returned 200 and 30 returned 429 with `Retry-After: 4`.
+
+## Reproduce
+
+```sh
+npm ci
+npm test
+npx tsc -b --pretty false
+npm run build
+npm run preview -- --host 127.0.0.1 --port 4173
+```
+
+The mandatory claim commands and precise browser/network evidence are listed in `.factory/verification.md`. Repair in the order listed there, redeploy, and run a fresh independent verification.
