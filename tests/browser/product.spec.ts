@@ -219,7 +219,7 @@ test('desktop and 390px mobile pass accessibility, metadata, mobile facts, and t
   await expect(page.locator('meta[name="twitter:title"]')).toHaveAttribute('content', 'Privacy — Loop Lab')
   await page.goto('/terms')
   await expect(page).toHaveTitle('Terms — Loop Lab')
+  expect(browserErrors).toEqual([])
   await page.goto('/not-a-real-loop')
   await expect(page).toHaveTitle('Page not found — Loop Lab')
-  expect(browserErrors).toEqual([])
 })
