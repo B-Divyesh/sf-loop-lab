@@ -104,3 +104,49 @@ PLAYWRIGHT_BASE_URL=https://loop-lab.sociobot.in npm run test:e2e
 Verification performed from a clean `npm ci` install: every exact command in `.factory/claims.json` passed, and `PLAYWRIGHT_BASE_URL=https://loop-lab.sociobot.in npm run test:e2e` passed all eight live browser tests. Fresh 390 px and desktop live checks confirmed the one-click isolated demo, Reset demo, local-only demo keys, service-worker offline claim coverage, metadata, routes, and prior repair fixes.
 
 Remaining blocking work: repair `/#saved` navigation and Back-button scroll restoration. The desktop header’s **Saved loops** link currently leaves the visitor at the top of the page while the URL changes to `/#saved`. Minor plain-language/terminology fixes are itemized in the review.
+
+---
+
+# Loop Lab review 3 handoff
+
+## Status
+
+**FAIL — adversarial first-read review 3 found six blocking reopened findings and four minor findings.**
+
+- Work order: `loop-lab-review-3`
+- Reviewed: 2026-08-29 UTC
+- Base: `4b3d0c092a9d3cb9b0f72ee2ebaac24883b335cd`
+- Live URL: `https://loop-lab.sociobot.in`
+- Full report: `.factory/review-3.md`
+- Product code changed: no
+
+## What was done
+
+- Audited the live landing page cold at 390 × 844 and 1440 × 900.
+- Exercised the one-click demo, realistic seeded state, Reset demo, Start for real, demo/real IndexedDB isolation, and request log.
+- Ran every exact command in `.factory/claims.json` from the clean requested checkout.
+- Checked live offline/privacy behavior, routes, titles, metadata, links, 404 behavior, route focus/history, accessibility, responsive layout, security headers, and visual identity.
+- Read `.factory/review-2.md`, all verification reports, and the previous handoff; verified each earlier item against live behavior and source.
+- Audited every landing/README sentence and interface label with word counts.
+
+## Verification
+
+```text
+npm ci                                      PASS
+all 9 exact claims.json commands            PASS
+npm test                                    PASS — 4 unit, 8 browser
+npm run typecheck                           PASS
+npm run lint                                PASS
+npm run build                               PASS — dist/ produced
+live offline/isolation/privacy claim subset PASS — 3 browser tests
+verify-url.sh live                          PASS
+live Playwright axe/mobile structure test   PASS
+```
+
+The live demo made only same-origin requests. Demo writes used `demo:` keys, Reset restored only the sample, and an existing `real:` sentinel survived demo use and remained visible in the real workspace.
+
+## Work left
+
+The previous review's Saved loops fragment and Back-button defect remains. Five previous copy findings also remain unchanged, so this round reopens all six as blocking per the work order. New minor findings cover phone-fold placement of the three facts, unlisted public claims, a 192 px rather than 180 px Apple touch icon, and the ambiguous **Stop** button label.
+
+See `.factory/review-3.md` for exact evidence and concrete fixes. No deployment, infrastructure, DNS, billing, or product source was modified.
