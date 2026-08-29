@@ -1,8 +1,12 @@
 # Loop Lab
 
-Loop Lab turns a short audio clip into a repeatable practice loop. It is for beginning electronic-music makers who want to listen closely without learning a DAW first.
+Loop Lab creates a repeatable practice loop from a short audio file. It is for beginning electronic-music makers who want to study a short passage without learning music-production software first.
 
-It runs in the browser and needs no account. Audio and practice cards stay in this browser and reopen after refresh. Exported JSON includes each card's audio. The separate sample workspace at `/demo` never reads or writes real loops. Imported audio is not uploaded, and Loop Lab uses no analytics or advertising. Slow playback keeps pitch in place. Browser time-stretch quality can vary by source audio.
+It runs in your browser and needs no account. Saved loops reopen in this browser after refresh. Imported audio is not uploaded. Loop Lab uses no analytics or advertising. Slow playback keeps pitch in place.
+
+## Try the sample
+
+Open `/?demo=1` for a four-bar sample beat. The banner marks the separate demo workspace. Reset demo restores its sample. Start for real discards demo changes.
 
 ## Run
 
@@ -11,9 +15,9 @@ npm ci
 npm run dev
 ```
 
-Open the local URL shown by Vite. Visit `/demo` for the isolated four-bar sample.
+Open the address printed by the development server.
 
-## Verify and build
+## Test and build
 
 ```sh
 npm test
@@ -22,13 +26,17 @@ npm run lint
 npm run build
 ```
 
-The static site is written to `dist/`, with `index.html` at its root. Deploy that directory to a static host with SPA fallback enabled; `staticwebapp.config.json` is included for Azure Static Web Apps.
+The production site is written to `dist/`, with `index.html` at its root.
 
-## Data
+## Deployment
 
-Audio, the active loop, and practice cards live in IndexedDB. Use **Export cards** to make a portable JSON backup and **Import cards** to restore it. The product is free while its former paid checkout is unavailable. See `/privacy` and `/terms`.
+Deploy `dist/` to a static host that serves `index.html` for app routes. The included `staticwebapp.config.json` configures Azure Static Web Apps.
 
-Audio clips must be at least 0.05 seconds long. Loop Lab rejects shorter clips and incomplete card exports before they are saved or played.
+## Data and price
+
+Loop Lab stores audio, the current loop, and saved loops in your browser. Use **Export loops** for a portable JSON backup and **Import loops** to restore it. Loop Lab is free. See `/privacy` and `/terms`.
+
+Audio files must be at least 0.05 seconds long. Loop Lab rejects shorter audio and incomplete saved-loop exports before saving or playback.
 
 ## License
 

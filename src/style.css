@@ -59,6 +59,17 @@ button:disabled {
 .skip-link:focus {
   top: 8px;
 }
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
 .site-head,
 main,
 footer {
@@ -71,6 +82,15 @@ footer {
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid #284261;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--ink);
+}
+
+#main,
+#saved-heading {
+  scroll-margin-top: 84px;
 }
 .wordmark {
   color: var(--paper);
@@ -687,6 +707,11 @@ footer a {
     transition: height 0.2s linear;
   }
 }
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
 @media (max-width: 720px) {
   .site-head {
     height: 68px;
@@ -701,10 +726,11 @@ footer a {
   .hero {
     grid-template-columns: 1fr;
     gap: 28px;
-    padding: 42px 0;
+    min-height: 0;
+    padding: 28px 0 42px;
   }
   .hero-art {
-    order: -1;
+    order: initial;
   }
   .hero h1 {
     font-size: 48px;
@@ -777,9 +803,6 @@ footer a {
   }
   .hero h1 {
     font-size: 43px;
-  }
-  .transport span {
-    display: none;
   }
   .facts {
     display: block;

@@ -1,5 +1,5 @@
 const CACHE = 'loop-lab-__BUILD_ID__'
-const CORE = ['/', '/demo', '/privacy', '/terms', '/offline.html', '/manifest.webmanifest', '/favicon.svg', '/icon-192.png', '/icon-512.png', '/loop-lab-hero.webp', '__BUILD_ASSETS__']
+const CORE = ['/', '/?demo=1', '/demo', '/privacy', '/terms', '/offline.html', '/offline.css', '/manifest.webmanifest', '/favicon.svg', '/apple-touch-icon.png', '/icon-192.png', '/icon-512.png', '/loop-lab-hero.webp', '__BUILD_ASSETS__']
 
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(CORE)).then(() => self.skipWaiting()))

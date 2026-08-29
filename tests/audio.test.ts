@@ -1,6 +1,31 @@
 import { describe, expect, it } from 'vitest'
 import { LoopPlayer } from '../src/audio'
 describe('granular loop playback', () => {
+  it('@claim:loop-playback restarts selected audio at the loop start after each end point', () => {
+    const positions: number[] = []
+    const player = new LoopPlayer() as any
+    const ctx = {
+      currentTime: 0,
+      destination: {},
+      createBufferSource: () => ({ connect: () => ({ connect: () => ({}) }), start: (_at: number, offset: number) => positions.push(offset), onended: null }),
+      createGain: () => ({ gain: { setValueAtTime: () => {}, linearRampToValueAtTime: () => {} }, connect: () => ({}) })
+    }
+    player.buffer = { duration: 8 }
+    player.ctx = ctx
+    player.playing = true
+    player.start = 1
+    player.end = 1.1
+    player.position = 1
+    player.speed = 1
+    player.nextTime = 0
+    player.schedule()
+    ctx.currentTime = .2
+    player.schedule()
+    const wraps = positions.slice(1).filter((position, index) => position < positions[index]).length
+    expect(wraps).toBeGreaterThanOrEqual(2)
+    expect(positions.every(position => position >= 1 && position < 1.1)).toBe(true)
+  })
+
   it('@claim:pitch-speed keeps grain source playback rate at its natural value', () => {
     const rates: unknown[] = []
     const player = new LoopPlayer() as any

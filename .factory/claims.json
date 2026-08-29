@@ -1,5 +1,12 @@
 [
   {
+    "id": "loop-playback",
+    "claim": "Creates a repeatable practice loop from a short audio file.",
+    "where": "landing headline, README",
+    "test": "npm run test:unit -- -t @claim:loop-playback",
+    "sandbox": "fake Web Audio scheduler; observe selected audio positions cross the end point and restart at the loop start at least twice"
+  },
+  {
     "id": "offline-reload",
     "claim": "Works offline after the first visit.",
     "where": "landing facts, README",
@@ -8,29 +15,36 @@
   },
   {
     "id": "demo-isolated",
-    "claim": "Demo sample data is separate from real loops.",
+    "claim": "Demo data is separate from real data and is discarded when you start for real.",
     "where": "demo banner, README",
     "test": "npm run test:e2e -- --grep @claim:demo-isolated",
-    "sandbox": "fresh Chromium context; save a demo card, start for real, assert the demo card is absent"
+    "sandbox": "fresh Chromium context; save a demo loop, start for real, re-enter demo, and assert only its seeded sample remains"
+  },
+  {
+    "id": "demo-four-bars",
+    "claim": "The sample loads a four-bar beat.",
+    "where": "landing action note, demo page, README",
+    "test": "npm run test:e2e -- --grep @claim:demo-four-bars",
+    "sandbox": "fresh Chromium context; open ?demo=1 and assert an eight-second 120 BPM four-bar sample is ready"
   },
   {
     "id": "no-account",
     "claim": "The free practice tool needs no account.",
-    "where": "landing facts, README",
+    "where": "landing facts, README, terms",
     "test": "npm run test:e2e -- --grep @claim:no-account",
     "sandbox": "fresh Chromium context; open the sample from the first screen and use the ready practice desk"
   },
   {
     "id": "cards-local",
-    "claim": "Audio and practice cards stay in this browser and reopen after refresh.",
-    "where": "landing saved section, privacy page, README",
+    "claim": "Saved loops reopen in this browser after refresh.",
+    "where": "landing privacy section, privacy page, README",
     "test": "npm run test:e2e -- --grep @claim:cards-local",
-    "sandbox": "fresh Chromium context; import generated WAV, save at clamped BPM, reload, reopen card and assert playback is enabled"
+    "sandbox": "fresh Chromium context; import generated WAV, save at clamped BPM, reload, reopen saved loop and assert playback is enabled"
   },
   {
     "id": "audio-private",
     "claim": "Imported audio is not uploaded.",
-    "where": "landing facts and boundaries, privacy page, README",
+    "where": "landing facts and privacy section, privacy page, README",
     "test": "npm run test:e2e -- --grep @claim:audio-private",
     "sandbox": "capture every request while importing and saving generated WAV; assert every request is same-origin"
   },
@@ -39,27 +53,27 @@
     "claim": "Loop Lab uses no analytics or advertising.",
     "where": "privacy page, README",
     "test": "npm run test:e2e -- --grep @claim:no-tracking",
-    "sandbox": "capture every request through landing, audio import, and card save; assert every request is same-origin"
+    "sandbox": "capture every request through landing, audio import, and saved-loop save; assert every request is same-origin"
   },
   {
-    "id": "cards-export",
-    "claim": "Exports and imports practice cards with their audio.",
-    "where": "saved cards toolbar, README",
-    "test": "npm run test:e2e -- --grep @claim:cards-export",
-    "sandbox": "fresh Chromium context; save generated WAV card, export JSON, delete database, import JSON, reopen card"
+    "id": "loops-export",
+    "claim": "Exports and imports saved loops with their audio.",
+    "where": "saved loops toolbar, README",
+    "test": "npm run test:e2e -- --grep @claim:loops-export",
+    "sandbox": "fresh Chromium context; save generated WAV loop, export JSON, delete database, import JSON, reopen saved loop"
   },
   {
     "id": "pitch-speed",
     "claim": "Slow playback keeps pitch in place.",
-    "where": "practice desk, README",
+    "where": "how-it-works section, README",
     "test": "npm run test:unit -- -t @claim:pitch-speed",
     "sandbox": "unit test advances source positions at half speed while each scheduled grain retains its natural playback rate"
   },
   {
     "id": "input-boundaries",
-    "claim": "Rejects clips shorter than 0.05 seconds and incomplete card files before saving or playback.",
-    "where": "audio import recovery message, card import recovery message, README",
+    "claim": "Rejects clips shorter than 0.05 seconds and incomplete saved-loop files before saving or playback.",
+    "where": "audio import recovery message, saved-loop import recovery message, README",
     "test": "npm run test:e2e -- --grep @claim:input-boundaries",
-    "sandbox": "fresh Chromium context; import a valid 20 ms WAV and a JSON export whose second card is incomplete; assert recovery, no playback error, and no imported cards"
+    "sandbox": "fresh Chromium context; import a valid 20 ms WAV and a JSON export whose second loop is incomplete; assert recovery, no playback error, and no imported loops"
   }
 ]

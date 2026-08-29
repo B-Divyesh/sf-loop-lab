@@ -1,35 +1,76 @@
-# Landing copy audit
+# Landing copy audit — polish 5
 
-All landing sentences are below 23 words and avoid the banned terms.
+The table covers every authored landing-page sentence, heading, label, button, link, placeholder, footer line, and image alternative. Dynamic audio names, time readouts, BPM values, and visitor-entered saved-loop text are data, not authored copy. Counts use whitespace-delimited words; hyphenated terms count as one word.
 
-| Sentence | Words | Flag |
+| Copy | Words | Flag |
 | --- | ---: | --- |
-| Make a loop you can practise. | 6 | — |
-| For new electronic-music makers who want to study one short sound without opening a DAW. | 15 | — |
-| The demo opens a four-bar beat. | 6 | — |
-| Your file stays on this device. | 6 | — |
-| Offline after the first visit. | 5 | — |
-| Local audio never uploads. | 4 | — |
+| Skip to main content | 4 | — |
+| LOOP LAB | 2 | — |
+| Demo | 1 | — |
+| Saved loops | 2 | — |
+| Privacy | 1 | — |
+| LOCAL AUDIO PRACTICE | 3 | — |
+| Create a repeatable audio practice loop. | 6 | — |
+| For beginning electronic-music makers who want to study a short passage without music-production software. | 13 | — |
+| Try it with sample data | 5 | — |
+| Import your audio | 3 | — |
+| Loads a four-bar beat. | 4 | — |
+| Works offline after the first visit. | 6 | — |
+| Imported audio is not uploaded. | 5 | — |
 | Free with no account. | 4 | — |
-| Set two points. Hear the middle. | 7 | — |
+| A pixel-art sampler with a glowing amber loop waveform. | 9 | — |
+| 01 / PRACTICE DESK | 3 | — |
+| Set loop start and end points. | 6 | — |
+| No audio loaded | 3 | — |
+| Load a local audio file to begin. | 7 | — |
+| Choose audio | 2 | — |
+| Replace audio | 2 | — |
+| Loop start | 2 | — |
+| Loop end | 2 | — |
+| Play loop | 2 | — |
+| Pause loop | 2 | — |
+| Stop loop | 2 | — |
+| Speed | 1 | — |
+| Pitch does not change | 4 | — |
+| BPM | 1 | — |
+| Tap tempo | 2 | — |
+| Saved loop name | 3 | — |
+| e.g. Kick and bass pocket | 5 | — |
+| What will you listen for? | 5 | — |
+| e.g. Where does the bass enter? | 6 | — |
+| Save loop | 2 | — |
+| 02 / SAVED LOOPS | 3 | — |
+| Reopen a saved loop. | 5 | — |
+| Export loops | 2 | — |
+| Import loops | 2 | — |
+| Saved loops appear here. | 5 | — |
+| Save one from the practice desk. | 7 | — |
+| 03 / HOW IT WORKS | 4 | — |
+| Make one useful practice loop. | 6 | — |
+| Load an audio file | 4 | — |
 | Use a file you have permission to use. | 8 | — |
-| Make a short part that repeats. | 7 | — |
-| Keep pitch while you listen closely. | 7 | — |
-| A practice tool, not a studio. | 7 | — |
-| Loop Lab has no tracks, recording, cloud library, or AI composition. | 11 | — |
-| Time-stretch sound quality varies by browser and source audio. | 9 | — |
-| Your audio is decoded and played in this browser. | 10 | — |
-| It is never sent to a server. | 8 | — |
-| Reopen a loop where you left it. | 7 | — |
-| Saved practice cards appear here. | 5 | — |
-| Save one from the practice desk. | 6 | — |
+| Set the loop start and end | 6 | — |
+| Select the passage to repeat. | 5 | — |
+| Slow playback without changing pitch | 5 | — |
+| Listen closely at a pace that helps. | 7 | — |
+| 04 / PRIVACY AND LIMITS | 4 | — |
+| Your audio stays in your browser. | 7 | — |
+| Saved loops reopen in this browser after refresh. | 8 | — |
+| Export saved loops before clearing browser data. | 7 | — |
+| Loop Lab is a local audio practice instrument. | 8 | — |
+| Terms | 1 | — |
+| Built by Param Factory | 4 | — |
+
+## Result
+
+No sentence exceeds 22 words. No banned marketing word appears. Claim-like statements are registered in `.factory/claims.json`; each has one tagged test.
 
 ## Terminology
 
-| Concept | One word used |
+| Concept | Visitor-facing term |
 | --- | --- |
-| Saved repeatable study item | practice card |
-| Imported sound | audio clip |
-| Repeat boundaries | A and B / loop points |
+| Saved repeatable study item | saved loop |
+| Input from the visitor | audio file |
+| Selected repeated part | passage / loop |
 | Trial workspace | demo |
-| Portable backup | card export |
+| Portable backup | saved-loop export |

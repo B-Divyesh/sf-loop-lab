@@ -3,7 +3,7 @@ import type { LoopCard, WorkspaceState } from './types'
 const DB = 'loop-lab'
 const STORE = 'cards'
 const WORKSPACES = 'workspaces'
-export const namespace = () => location.pathname === '/demo' || location.search.includes('demo=1') ? 'demo:' : 'real:'
+export const namespace = () => location.pathname === '/demo' || new URLSearchParams(location.search).get('demo') === '1' ? 'demo:' : 'real:'
 
 function open() {
   return new Promise<IDBDatabase>((resolve, reject) => {
@@ -81,6 +81,29 @@ export async function clearWorkspace() {
     const req = db.transaction(WORKSPACES, 'readwrite').objectStore(WORKSPACES).delete(namespace() + 'active')
     req.onsuccess = () => { db.close(); resolve() }
     req.onerror = () => reject(req.error)
+  })
+}
+
+/** Remove only the throwaway demo namespace, regardless of the current URL. */
+export async function clearDemoData() {
+  const db = await open()
+  return new Promise<void>((resolve, reject) => {
+    const transaction = db.transaction([STORE, WORKSPACES], 'readwrite')
+    const removeDemoRecords = (storeName: string) => {
+      const store = transaction.objectStore(storeName)
+      const request = store.openCursor()
+      request.onsuccess = () => {
+        const cursor = request.result
+        if (!cursor) return
+        if (String(cursor.key).startsWith('demo:')) cursor.delete()
+        cursor.continue()
+      }
+    }
+    removeDemoRecords(STORE)
+    removeDemoRecords(WORKSPACES)
+    transaction.oncomplete = () => { db.close(); resolve() }
+    transaction.onerror = () => { db.close(); reject(transaction.error) }
+    transaction.onabort = () => { db.close(); reject(transaction.error) }
   })
 }
 

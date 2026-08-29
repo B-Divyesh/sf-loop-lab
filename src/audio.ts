@@ -35,7 +35,8 @@ export class LoopPlayer {
   }
   async loadSample() {
     const ctx = this.ensureContext()
-    const length = ctx.sampleRate * 12
+    // Four 4/4 bars at 120 BPM last eight seconds.
+    const length = ctx.sampleRate * 8
     const b = ctx.createBuffer(1, length, ctx.sampleRate)
     const data = b.getChannelData(0)
     for (let i = 0; i < length; i++) {
