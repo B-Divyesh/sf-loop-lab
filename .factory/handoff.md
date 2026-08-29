@@ -44,6 +44,8 @@ The live release was opened cold at `/`, `/?demo=1`, and `/#saved`. The direct s
 
 Live route results: `/`, `/?demo=1`, `/demo`, `/privacy`, `/terms`, `/apple-touch-icon.png`, `/manifest.webmanifest`, `/robots.txt`, and `/sitemap.xml` return 200. `/not-a-real-loop` returns the styled HTTP 404. Live security headers include CSP with response-header `frame-ancestors 'none'`, HSTS, `Referrer-Policy`, and `X-Content-Type-Options`.
 
+The deployed `index.html`, hashed JavaScript bundle, service worker, manifest, and Apple touch icon have SHA-256 hashes identical to the final local `dist/` build.
+
 Local Lighthouse report `/tmp/loop-lab-lighthouse.json` measured Performance 92, Accessibility 100, Best Practices 100, SEO 100, FCP 0.9 s, LCP 1.3 s, and CLS 0. The report was written before Lighthouse reported a post-audit tab crash. Playwright axe found no serious or critical issue at desktop or mobile. The standalone axe CLI could not create a Selenium session with the worker’s ChromeDriver; no product browser issue was found by the pinned Playwright axe integration.
 
 ## Run and deploy
