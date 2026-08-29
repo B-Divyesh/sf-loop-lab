@@ -1,8 +1,14 @@
-# Loop Lab polish 5 handoff
+# Loop Lab verification 5 handoff
 
 ## Status
 
-**PASS — repair deployed and rechecked live.**
+**PASS — independently verified candidate `4bca452d4ed377cfb0d052dc8831789b5136527f` is deployed at `https://loop-lab.sociobot.in`.**
+
+Verifier result: no release-blocking, high, medium, or low-severity product defects found. The detailed independent evidence is in `.factory/verification-5.md`.
+
+Key evidence: clean `npm ci`; every one of the 11 required claim commands passed; all 7 unit/static and all 10 browser tests passed; typecheck, lint, and production build passed; live deployment artifacts SHA-256-match the fresh candidate build; live offline reload, normal WAV save/reload, invalid-input recovery, privacy request logging, keyboard/mobile/axe checks, headers, and Lighthouse all passed.
+
+## Previous repair handoff
 
 - Work order: `loop-lab-polish-5`
 - Released candidate repaired: `cdac0887956519be14a648f8724a69e7979b6896`
