@@ -1,60 +1,22 @@
-# Loop Lab verification 5 handoff
+# Loop Lab review 6 handoff
 
 ## Status
 
-**PASS — independently verified candidate `4bca452d4ed377cfb0d052dc8831789b5136527f` is deployed at `https://loop-lab.sociobot.in`.**
+**PASS — zero findings.** Adversarial review 6 covers deployed commit `d5d6562f737efa5a2afe5009651a839eda4cd01b` at `https://loop-lab.sociobot.in`. The complete evidence is in `.factory/review-6.md`.
 
-Verifier result: no release-blocking, high, medium, or low-severity product defects found. The detailed independent evidence is in `.factory/verification-5.md`.
+No product code was modified. This work order adds the independent review and updates this handoff only.
 
-Key evidence: clean `npm ci`; every one of the 11 required claim commands passed; all 7 unit/static and all 10 browser tests passed; typecheck, lint, and production build passed; live deployment artifacts SHA-256-match the fresh candidate build; live offline reload, normal WAV save/reload, invalid-input recovery, privacy request logging, keyboard/mobile/axe checks, headers, and Lighthouse all passed.
+## What was verified
 
-## Previous repair handoff
+- Cold first screens at 390 × 844 and 1440 × 900 state the job, audience, first action, action result, and three decision facts before scrolling.
+- The one-click demo opens with an eight-second four-bar sample, banner, waveform controls, and seeded saved loop. Reset restores the seed; leaving removes demo records; a real-data sentinel remains untouched.
+- Every one of the 11 commands in `.factory/claims.json` passed separately from a clean clone.
+- The full local and deployed browser suites passed, including offline reload, same-origin request logging, import/export, persistence, invalid-input recovery, routing/history, mobile, keyboard, reduced-motion, and axe checks.
+- `/`, `/demo`, `/privacy`, `/terms`, metadata, required assets, security headers, links, and the designed HTTP 404 were checked live.
+- Every finding from reviews 2–5 was confirmed fixed in both current code and live behavior.
+- Landing and README copy were audited sentence by sentence; no copy or unlisted-claim finding remains.
 
-- Work order: `loop-lab-polish-5`
-- Released candidate repaired: `cdac0887956519be14a648f8724a69e7979b6896`
-- Base reviewed: `3faa65242a860cdcf56f873dff39b97b3f58d39a`
-- Repair commit: `6ec9e9935505e6f194e72dfc2e0d27cc421df7d0`
-- Deployment: Azure Static Web App `sf-loop-lab`, deployment `e20e01d0-f64d-4d82-ae04-1cd4dd17ac4e`
-- Live URL: `https://loop-lab.sociobot.in`
-- Detailed finding-by-finding evidence: `.factory/polish-5.md`
-
-## What changed
-
-- Repaired saved-loop fragment links, cold deep links, Back-button scroll/focus restoration, route titles, live route announcements, a focusable main skip target, and the designed HTTP 404 flow.
-- Made `/?demo=1` the direct sample entry. Its banner, Reset demo, and Start for real controls now operate on a separate `demo:` namespace. Leaving Demo discards every demo record before returning to real data.
-- Rewrote the first screen, headers, labels, README, privacy/terms, and mobile layout in plain words. “Saved loop” is the one visitor-facing name. The three decision facts appear above the 390×844 fold.
-- Removed unprovable public copy and registered every retained product promise in `.factory/claims.json`. Added observable loop-wrap and four-bar demo claims plus a registry-to-test completeness check.
-- Added and linked a 180×180 Apple touch icon, corrected the sample to an eight-second four-bar beat at 120 BPM, renamed Stop to Stop loop, and precached the new assets.
-
-## Exact verification evidence
-
-```text
-Clean clone: /tmp/loop-lab-polish-5.FUUm7M
-npm ci                                                   PASS
-all 11 exact claims.json commands, run individually     PASS
-npm test                                                 PASS — 7 Vitest tests, 10 Chromium browser tests
-npm run typecheck                                        PASS
-npm run lint                                             PASS
-npm run build                                            PASS — dist/ produced
-git diff --check                                         PASS
-PLAYWRIGHT_BASE_URL=https://loop-lab.sociobot.in \
-  npm run test:e2e                                       PASS — 10 Chromium browser tests
-verify-url.sh live                                      PASS — title/lang/h1/main/alt/labels/console
-```
-
-The live release was opened cold at `/`, `/?demo=1`, and `/#saved`. The direct saved URL focused `#saved-heading` at `scrollY=1582`; the live mobile first screen shows all three facts; and the live 180 px Apple icon decoded correctly. Screenshots are retained at:
-
-- `/tmp/loop-lab-polish-5-live-mobile.png`
-- `/tmp/loop-lab-polish-5-live-demo.png`
-- `/tmp/loop-lab-polish-5-live-saved.png`
-
-Live route results: `/`, `/?demo=1`, `/demo`, `/privacy`, `/terms`, `/apple-touch-icon.png`, `/manifest.webmanifest`, `/robots.txt`, and `/sitemap.xml` return 200. `/not-a-real-loop` returns the styled HTTP 404. Live security headers include CSP with response-header `frame-ancestors 'none'`, HSTS, `Referrer-Policy`, and `X-Content-Type-Options`.
-
-The deployed `index.html`, hashed JavaScript bundle, service worker, manifest, and Apple touch icon have SHA-256 hashes identical to the final local `dist/` build.
-
-Local Lighthouse report `/tmp/loop-lab-lighthouse.json` measured Performance 92, Accessibility 100, Best Practices 100, SEO 100, FCP 0.9 s, LCP 1.3 s, and CLS 0. The report was written before Lighthouse reported a post-audit tab crash. Playwright axe found no serious or critical issue at desktop or mobile. The standalone axe CLI could not create a Selenium session with the worker’s ChromeDriver; no product browser issue was found by the pinned Playwright axe integration.
-
-## Run and deploy
+## Commands
 
 ```sh
 npm ci
@@ -62,9 +24,13 @@ npm test
 npm run typecheck
 npm run lint
 npm run build
-/opt/fleet/lib/deploy-static.sh loop-lab dist
+PLAYWRIGHT_BASE_URL=https://loop-lab.sociobot.in npm run test:e2e
+mkdir -p /tmp/loop-lab-review6-verify
+/opt/fleet/lib/verify-url.sh https://loop-lab.sociobot.in /tmp/loop-lab-review6-verify
 ```
 
-## Known gaps
+The build produced `dist/` with 23.99 kB raw / 8.58 kB gzip initial JavaScript. The URL verifier reported no landing-page console or page errors.
 
-None. Browser storage quotas remain device-dependent; use Export loops before clearing site data.
+## Known gaps and next steps
+
+None found. Keep the existing claim, demo isolation, request-origin, mobile-fold, accessibility, and route-history tests as release gates.
