@@ -150,3 +150,33 @@ The live demo made only same-origin requests. Demo writes used `demo:` keys, Res
 The previous review's Saved loops fragment and Back-button defect remains. Five previous copy findings also remain unchanged, so this round reopens all six as blocking per the work order. New minor findings cover phone-fold placement of the three facts, unlisted public claims, a 192 px rather than 180 px Apple touch icon, and the ambiguous **Stop** button label.
 
 See `.factory/review-3.md` for exact evidence and concrete fixes. No deployment, infrastructure, DNS, billing, or product source was modified.
+
+---
+
+# Loop Lab review 4 handoff
+
+## Status
+
+**FAIL — adversarial first-read review 4 found ten unresolved blocking findings.**
+
+- Work order: `loop-lab-review-4`
+- Reviewed: 2026-08-29 UTC
+- Base: `a94ad9a5a8d8379475761c99445b5730baf2779a`
+- Live URL: `https://loop-lab.sociobot.in`
+- Full report: `.factory/review-4.md`
+- Product code changed: no
+
+## What was done
+
+- Audited the deployed landing cold at 390 × 844 and 1440 × 900, including its first screen and one-click demo.
+- Confirmed the seeded demo state, persistent banner, Reset, demo/real IndexedDB namespace isolation, and same-origin request behavior.
+- Made a separate clean clone at the requested commit, ran `npm ci`, then ran all nine exact commands in `.factory/claims.json`; all passed.
+- Ran `npm test`, typecheck, lint, and production build in the working checkout; all passed and `dist/` was produced.
+- Checked routes, metadata, links, 404, headers, mobile placement, visual identity, and previous-review repairs.
+- Read all prior review, verification, and handoff reports; no `polish-*.md` report exists.
+
+## Work left
+
+The same ten issues from review 3 remain: broken Saved loops fragment/Back behavior; vague offline copy; DAW jargon; conflicting saved-item terms; vague headings; README implementation jargon/history; hidden mobile facts; unlisted claims; missing 180 px Apple touch icon; and ambiguous Stop label. Per the review instructions these are all blocking. See `.factory/review-4.md` for exact quotes, live evidence, and concrete repairs.
+
+No product code, deployment configuration, infrastructure, DNS, billing, or external state was changed. The only committed files should be this handoff update and the review report.
