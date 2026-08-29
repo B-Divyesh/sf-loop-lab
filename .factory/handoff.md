@@ -180,3 +180,35 @@ See `.factory/review-3.md` for exact evidence and concrete fixes. No deployment,
 The same ten issues from review 3 remain: broken Saved loops fragment/Back behavior; vague offline copy; DAW jargon; conflicting saved-item terms; vague headings; README implementation jargon/history; hidden mobile facts; unlisted claims; missing 180 px Apple touch icon; and ambiguous Stop label. Per the review instructions these are all blocking. See `.factory/review-4.md` for exact quotes, live evidence, and concrete repairs.
 
 No product code, deployment configuration, infrastructure, DNS, billing, or external state was changed. The only committed files should be this handoff update and the review report.
+
+---
+
+# Loop Lab review 5 handoff
+
+## Status
+
+**FAIL — adversarial first-read review 5 found eleven blocking findings and one minor finding.**
+
+- Work order: `loop-lab-review-5`
+- Reviewed: 2026-08-29 UTC
+- Base: `59228d1db77f42b40002dfc7843d003522991eef`
+- Live URL: `https://loop-lab.sociobot.in`
+- Full report: `.factory/review-5.md`
+- Product code changed: no
+
+## What was done
+
+- Audited the deployed landing cold at 390 × 844 and 1440 × 900.
+- Exercised the one-click demo, seeded state, Reset, Start for real, demo/real IndexedDB separation, exit/re-entry behavior, offline reload, and request log.
+- Ran all nine exact `.factory/claims.json` commands from a separate clean clone; all passed.
+- Ran the complete local tests, typecheck, lint, build, the full live browser suite, Playwright axe checks, and `verify-url.sh`; all passed and `dist/` was produced.
+- Crawled live routes and assets; checked titles, metadata, 404, header/footer, security headers, history/focus, icon dimensions, mobile placement, and visual identity.
+- Read every earlier review and the full handoff; no `polish-*.md` file exists.
+
+## Work left
+
+All ten findings from review 4 remain and are blocking again: Saved-loops/history routing, vague offline copy, DAW jargon, inconsistent saved-item terms, vague headings, README jargon/history, below-fold mobile facts, unlisted claims, the 192 px Apple touch icon, and the ambiguous Stop label.
+
+Two new findings were confirmed. Demo edits survive **Start for real** and reappear on the next demo visit, contrary to the demo discard requirement; this is blocking. The skip link says **“Skip to the practice desk”** but targets the hero/main start; this is minor.
+
+No product, deployment, infrastructure, DNS, billing, or external state was modified. Only this handoff entry and `.factory/review-5.md` were added for the review.
