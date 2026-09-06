@@ -28,6 +28,13 @@
     "sandbox": "fresh Chromium context; open ?demo=1 and assert an eight-second 120 BPM four-bar sample is ready"
   },
   {
+    "id": "demo-reset",
+    "claim": "Reset demo restores its sample without changing real data.",
+    "where": "README, demo sandbox documentation",
+    "test": "npm run test:e2e -- --grep @claim:demo-reset",
+    "sandbox": "fresh Chromium context; save a real loop, add a demo loop, reset Demo, assert the added loop is gone, the seeded sample and completion status return, and the real loop remains"
+  },
+  {
     "id": "no-account",
     "claim": "The free practice tool needs no account.",
     "where": "landing facts, README, terms",

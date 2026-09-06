@@ -1,4 +1,4 @@
-# Landing copy audit — polish 5
+# Landing copy audit — repair 3
 
 The table covers every authored landing-page sentence, heading, label, button, link, placeholder, footer line, and image alternative. Dynamic audio names, time readouts, BPM values, and visitor-entered saved-loop text are data, not authored copy. Counts use whitespace-delimited words; hyphenated terms count as one word.
 
@@ -11,7 +11,7 @@ The table covers every authored landing-page sentence, heading, label, button, l
 | Privacy | 1 | — |
 | LOCAL AUDIO PRACTICE | 3 | — |
 | Create a repeatable audio practice loop. | 6 | — |
-| For beginning electronic-music makers who want to study a short passage without music-production software. | 13 | — |
+| For beginning electronic-music makers who want to study a short passage without music-production software. | 14 | — |
 | Try it with sample data | 5 | — |
 | Import your audio | 3 | — |
 | Loads a four-bar beat. | 4 | — |
@@ -56,6 +56,7 @@ The table covers every authored landing-page sentence, heading, label, button, l
 | 04 / PRIVACY AND LIMITS | 4 | — |
 | Your audio stays in your browser. | 7 | — |
 | Saved loops reopen in this browser after refresh. | 8 | — |
+| Slow-playback sound quality can vary by browser. | 7 | — |
 | Export saved loops before clearing browser data. | 7 | — |
 | Loop Lab is a local audio practice instrument. | 8 | — |
 | Terms | 1 | — |
@@ -63,7 +64,7 @@ The table covers every authored landing-page sentence, heading, label, button, l
 
 ## Result
 
-No sentence exceeds 22 words. No banned marketing word appears. Claim-like statements are registered in `.factory/claims.json`; each has one tagged test.
+No sentence exceeds 22 words. No banned marketing word appears. Claim-like promises are registered in `.factory/claims.json`; each has one tagged test. The browser-quality sentence states a required limitation rather than promising an outcome.
 
 ## Terminology
 

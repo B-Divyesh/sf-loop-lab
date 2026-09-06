@@ -2,7 +2,7 @@
 
 Loop Lab creates a repeatable practice loop from a short audio file. It is for beginning electronic-music makers who want to study a short passage without learning music-production software first.
 
-It runs in your browser and needs no account. Saved loops reopen in this browser after refresh. Imported audio is not uploaded. Loop Lab uses no analytics or advertising. Slow playback keeps pitch in place.
+It runs in your browser and needs no account. Saved loops reopen in this browser after refresh. Imported audio is not uploaded. Loop Lab uses no analytics or advertising. Slow playback keeps pitch in place. Slow-playback sound quality can vary by browser.
 
 ## Try the sample
 

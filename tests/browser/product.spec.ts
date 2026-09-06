@@ -71,6 +71,32 @@ test('@claim:demo-four-bars opens the isolated four-bar sample from ?demo=1', as
   await expect(page.locator('.card-open', { hasText: 'Kick + bass pocket' })).toContainText('120 BPM')
 })
 
+test('@claim:demo-reset restores the sample and leaves real data unchanged', async ({ page }) => {
+  await page.goto('/')
+  await importTone(page)
+  await saveTone(page, 'Real saved loop')
+
+  await page.getByRole('link', { name: 'Demo' }).click()
+  await expect(page).toHaveURL(/\?demo=1$/)
+  await expect(page.locator('.clip-strip b')).toHaveText('Night bus · four-bar beat')
+  await page.locator('#card-name').fill('Remove on reset')
+  await page.locator('#card-note').fill('This is a temporary demo change.')
+  await page.locator('#card-form button').click()
+  await expect(page.locator('.card-open', { hasText: 'Remove on reset' })).toBeVisible()
+
+  await page.locator('#start').fill('2')
+  await page.getByRole('button', { name: 'Reset demo' }).click()
+  await expect(page.locator('.status-message')).toHaveText('Demo reset. The four-bar sample is ready.')
+  await expect(page.locator('.clip-strip b')).toHaveText('Night bus · four-bar beat')
+  await expect(page.locator('#start')).toHaveValue('1')
+  await expect(page.locator('.card-open', { hasText: 'Kick + bass pocket' })).toHaveCount(1)
+  await expect(page.locator('.card-open', { hasText: 'Remove on reset' })).toHaveCount(0)
+  await expect(page.locator('.card-open', { hasText: 'Real saved loop' })).toHaveCount(0)
+
+  await page.getByRole('link', { name: 'Start for real' }).click()
+  await expect(page.locator('.card-open', { hasText: 'Real saved loop' })).toBeVisible()
+})
+
 test('@claim:cards-local saves audio and reopens its saved loop after refresh', async ({ page }) => {
   await page.goto('/')
   await importTone(page)
