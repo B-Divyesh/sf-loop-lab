@@ -1,44 +1,55 @@
-# Loop Lab review 7 handoff
+# Loop Lab repair 3 handoff
 
 ## Status
 
-**FAIL — 2 findings, including 1 untested public claim.** The full independent report is in `.factory/review-7.md`.
+**PASS.** Both review-7 findings are repaired and verified on the deployed HTTPS product. No current or reopened earlier finding remains.
 
-No product code was modified. This work order adds the review report and updates this handoff only.
+## Candidate and deployment
 
-## Candidate and live deployment
-
-- Implementation reviewed: `6ec9e9935505e6f194e72dfc2e0d27cc421df7d0`
-- Documentation base reviewed: `45d4f0a196e04cc74fb5924fe741c831906f935f`
+- Implementation SHA: `01d8af68565c013e516d3d2376f89cb815c0a5e1`
+- Documentation base before this handoff: `38966d1c16af609b1fcf3b3d1fa67ea7c021bf88`
+- Documentation record: this handoff commit, which is intentionally newer than the deployed implementation
+- Deployment: Azure Static Web Apps production deployment `2e16a3b6-6c7b-43eb-9223-1f1f9c2b9bd9`
 - Live URL: `https://loop-lab.sociobot.in`
-- Fresh-build shell, JS, CSS, service worker, manifest, Apple icon, and hero hashes match live.
+- Local and live SHA-256 hashes match for `index.html`, JavaScript, CSS, service worker, manifest, Apple icon, and hero image.
 
-## Findings to repair
+## Repairs
 
-1. Add the brief-required plain disclosure that slow-playback sound quality can vary by browser.
-2. Register and test the README promise **“Reset demo restores its sample.”** The test must change Demo, click Reset, and assert removal plus reseeding.
+1. Added the required visible limitation, **“Slow-playback sound quality can vary by browser.”**, to the landing limits section and README. It is expectation-setting, not a playback-quality promise.
+2. Registered the `demo-reset` claim and added an outcome-based Playwright test. It saves a real loop, changes Demo, resets it, checks the reset status, restored sample state and seed, confirms the added demo loop is gone, and confirms the real saved loop remains.
+3. Updated `.factory/demo.md` and the full landing copy audit. The catalog description remains verb-first at 56 characters and is copied to `/work/.evidence/catalog-description.txt`.
 
-The live Reset flow itself works, and real data remained unchanged in a sentinel test. The failure is the missing disclosure and the untested public claim.
+## First read and product flow
 
-## Verification completed
+Fresh phone (390×844) and desktop (1440×900) contexts state the job as **“Create a repeatable audio practice loop.”** The audience is beginning electronic-music makers studying a short passage. The first action is **“Try it with sample data”**, followed by **“Loads a four-bar beat.”** All three offline, privacy, and price facts are visible before scrolling in both contexts.
 
-- All 11 existing claim commands passed separately after `npm ci` in a clean clone.
-- `npm test`, typecheck, lint, build, and `git diff --check` passed.
-- The full local and live browser suites passed: 7 unit/static tests and 10 browser tests.
-- Fresh phone and desktop first reads, one-click Demo, Reset, Demo exit, real-data sentinel, normal import/save/reopen, invalid and boundary inputs, keyboard, focus, reduced motion, offline reload/fallback, privacy requests, links, route titles, legal pages, and designed HTTP 404 were checked.
-- `verify-url.sh` and Playwright axe passed. Lighthouse recorded 96 Performance, 100 Accessibility, 100 Best Practices, and 100 SEO; LCP 1.5 s and CLS 0.
+One click opens the persistent **“Demo — sample data, nothing is saved to your real data.”** banner. The populated result is the eight-second **“Night bus · four-bar beat”** sample and the **“Kick + bass pocket”** saved loop at 120 BPM. Reset removes a new demo loop, restores the seed and sample settings, and leaves real data unchanged.
 
-## Re-run
+## Verification
 
-```sh
-npm ci
-npm test
-npm run typecheck
-npm run lint
-npm run build
-PLAYWRIGHT_BASE_URL=https://loop-lab.sociobot.in npm run test:e2e
-mkdir -p /tmp/loop-lab-review7-verify
-/opt/fleet/lib/verify-url.sh https://loop-lab.sociobot.in /tmp/loop-lab-review7-verify
-```
+- Clean clone at the implementation SHA: `npm ci` completed with 200 packages audited and no vulnerabilities.
+- Every one of the 12 commands in `.factory/claims.json` ran separately and exited 0. The complete log is `/work/.evidence/claims-repair-3.log`.
+- `npm test`: PASS — 7 unit/static tests and 11 Chromium tests.
+- `npm run typecheck`: PASS.
+- `npm run lint`: PASS.
+- `npm run build`: PASS; `dist/index.html` exists.
+- Live `PLAYWRIGHT_BASE_URL=https://loop-lab.sociobot.in npm run test:e2e`: PASS — all 11 tests.
+- Live `verify-url.sh`: PASS — useful title, `lang=en`, one h1, main landmark, image alternatives, labels, and no cold-load console error.
+- Playwright axe: no serious or critical violations at desktop or 390 px. Touch targets, keyboard skip/focus, reduced motion, route focus/history, and mobile overflow checks pass.
+- Normal, invalid, boundary, and recovery checks pass: local WAV import/play/save/reopen, BPM clamping, corrupt and sub-0.05-second audio, atomic malformed-import rejection, delete cancellation, visible update status, and saved-loop export/import.
+- Offline: the controlled Demo reloads offline. With the local production server stopped after the first visit, an uncached navigation renders the designed offline fallback. A live service-worker update check completes.
+- Privacy: request capture through landing, import, save, reset, and Demo stays same-origin. Demo and real IndexedDB namespaces remain isolated.
+- Routes: `/`, `/?demo=1`, `/demo`, `/privacy`, `/terms`, manifest, robots, sitemap, and icons return 200. An unknown route deliberately returns the designed HTTP 404.
+- Security and caching: live CSP includes `frame-ancestors 'none'`; HSTS, Referrer Policy, and `nosniff` are present. Hashed assets are immutable and `sw.js` is `no-cache`.
 
-After repair, run every command in `.factory/claims.json` separately and repeat the public-copy inventory before changing the verdict.
+## Performance
+
+The production JavaScript is 24,044 bytes raw / 8.61 KiB gzip. CSS is 11,174 bytes raw / 3.20 KiB gzip. The hero image is 123,250 bytes.
+
+Live mobile Lighthouse: Performance 99, Accessibility 100, Best Practices 100, SEO 100; FCP 0.8 s, LCP 1.5 s, TBT 110 ms, CLS 0, total transfer 188 KiB. The JSON report is `/work/.evidence/lighthouse-repair-3.json`.
+
+## Earlier findings and remaining gaps
+
+The full verification and review history was reread. Current tests and live checks preserve the earlier repairs for saved-loop persistence, portable audio export/import, malformed input, short audio, BPM bounds, visible recovery, focus, touch targets, Demo exit isolation, update status, route metadata/history, security headers, caching, and designed 404 behavior.
+
+The researched one-time paid upgrade remains unregistered and is not advertised. The free core is complete; no checkout, license path, or paid entitlement is exposed, so no billing-offer metadata was written. Backend tenant, restart, health, and 429 checks do not apply to this static local-first PWA.
