@@ -1,22 +1,34 @@
-# Loop Lab review 6 handoff
+# Loop Lab review 7 handoff
 
 ## Status
 
-**PASS — zero findings.** Adversarial review 6 covers deployed commit `d5d6562f737efa5a2afe5009651a839eda4cd01b` at `https://loop-lab.sociobot.in`. The complete evidence is in `.factory/review-6.md`.
+**FAIL — 2 findings, including 1 untested public claim.** The full independent report is in `.factory/review-7.md`.
 
-No product code was modified. This work order adds the independent review and updates this handoff only.
+No product code was modified. This work order adds the review report and updates this handoff only.
 
-## What was verified
+## Candidate and live deployment
 
-- Cold first screens at 390 × 844 and 1440 × 900 state the job, audience, first action, action result, and three decision facts before scrolling.
-- The one-click demo opens with an eight-second four-bar sample, banner, waveform controls, and seeded saved loop. Reset restores the seed; leaving removes demo records; a real-data sentinel remains untouched.
-- Every one of the 11 commands in `.factory/claims.json` passed separately from a clean clone.
-- The full local and deployed browser suites passed, including offline reload, same-origin request logging, import/export, persistence, invalid-input recovery, routing/history, mobile, keyboard, reduced-motion, and axe checks.
-- `/`, `/demo`, `/privacy`, `/terms`, metadata, required assets, security headers, links, and the designed HTTP 404 were checked live.
-- Every finding from reviews 2–5 was confirmed fixed in both current code and live behavior.
-- Landing and README copy were audited sentence by sentence; no copy or unlisted-claim finding remains.
+- Implementation reviewed: `6ec9e9935505e6f194e72dfc2e0d27cc421df7d0`
+- Documentation base reviewed: `45d4f0a196e04cc74fb5924fe741c831906f935f`
+- Live URL: `https://loop-lab.sociobot.in`
+- Fresh-build shell, JS, CSS, service worker, manifest, Apple icon, and hero hashes match live.
 
-## Commands
+## Findings to repair
+
+1. Add the brief-required plain disclosure that slow-playback sound quality can vary by browser.
+2. Register and test the README promise **“Reset demo restores its sample.”** The test must change Demo, click Reset, and assert removal plus reseeding.
+
+The live Reset flow itself works, and real data remained unchanged in a sentinel test. The failure is the missing disclosure and the untested public claim.
+
+## Verification completed
+
+- All 11 existing claim commands passed separately after `npm ci` in a clean clone.
+- `npm test`, typecheck, lint, build, and `git diff --check` passed.
+- The full local and live browser suites passed: 7 unit/static tests and 10 browser tests.
+- Fresh phone and desktop first reads, one-click Demo, Reset, Demo exit, real-data sentinel, normal import/save/reopen, invalid and boundary inputs, keyboard, focus, reduced motion, offline reload/fallback, privacy requests, links, route titles, legal pages, and designed HTTP 404 were checked.
+- `verify-url.sh` and Playwright axe passed. Lighthouse recorded 96 Performance, 100 Accessibility, 100 Best Practices, and 100 SEO; LCP 1.5 s and CLS 0.
+
+## Re-run
 
 ```sh
 npm ci
@@ -25,12 +37,8 @@ npm run typecheck
 npm run lint
 npm run build
 PLAYWRIGHT_BASE_URL=https://loop-lab.sociobot.in npm run test:e2e
-mkdir -p /tmp/loop-lab-review6-verify
-/opt/fleet/lib/verify-url.sh https://loop-lab.sociobot.in /tmp/loop-lab-review6-verify
+mkdir -p /tmp/loop-lab-review7-verify
+/opt/fleet/lib/verify-url.sh https://loop-lab.sociobot.in /tmp/loop-lab-review7-verify
 ```
 
-The build produced `dist/` with 23.99 kB raw / 8.58 kB gzip initial JavaScript. The URL verifier reported no landing-page console or page errors.
-
-## Known gaps and next steps
-
-None found. Keep the existing claim, demo isolation, request-origin, mobile-fold, accessibility, and route-history tests as release gates.
+After repair, run every command in `.factory/claims.json` separately and repeat the public-copy inventory before changing the verdict.
